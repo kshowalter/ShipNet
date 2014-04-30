@@ -1,0 +1,22 @@
+{
+    
+    "Scout": {
+        "slots": {
+            "prop": 2,
+            "life_support": 2
+        },
+        "components": {
+            "power": 0,
+            "replication": 1,
+            "computer": 2,
+            "sleep_pod": 2,
+            "control_pod": 1,
+            "cargo": 4		
+        }	
+    }
+
+    
+    
+    
+    
+}

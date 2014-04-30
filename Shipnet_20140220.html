@@ -1,0 +1,455 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+    <title>KitTest</title>
+	
+<!-- scripts -->
+    <script type="text/javascript" src="media/js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="media/js/jquery-ui-1.10.4.custom.js"></script>
+	<script type="text/javascript" src="media/js/jquery.sparkline.js"></script>
+    <script type="text/javascript" src="media/js/jquery.dataTables.js"></script>
+
+	<!--  -->
+	<script type="text/javascript" src="media/js/underscore.js"></script>
+
+	<!-- http://momentjs.com/ -->
+	<script type="text/javascript" src="media/js/moment-with-langs.js"></script>
+
+	
+<!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+	
+<!-- Style -->
+	
+	<!-- 
+	<link rel="stylesheet" href="media/css/smoothness/jquery-ui-1.10.4.custom.css">
+	-->
+	<link rel="stylesheet" href="style.css">
+
+<script type="text/javascript">
+
+	var print = console.log;
+
+	var rate = 1;
+
+    
+    
+    
+//////////////////////////////////////////
+// Library
+    
+function extend(obj, props) {
+    for(prop in props) { 
+        if(props.hasOwnProperty(prop)) {
+            obj[prop] = props[prop];
+        } 
+    } 
+}
+    
+    
+//////////////////////////////////////////
+// setup, intervals
+
+
+	
+	$(document).ready(function() {
+		setInterval("update_status_page()",1000);
+        get_JSON('comps.json', 'comps')
+//        get_data()
+	});
+	
+
+    
+    function get_JSON(URL, name) {
+		$.getJSON( URL, function( json ) {
+            build_comps(json);
+		}).fail(function(jqxhr, textStatus, error) { 
+			console.log( "error", textStatus, error  ); 
+		});
+	}
+
+    function get_data() {
+        json_comps = false;
+        while(!json_comps || true){
+            var URL = 'comps.json'; 
+            $.getJSON( URL, function( json ) {
+                json_comps = json
+            }).fail(function(jqxhr, textStatus, error) { 
+                console.log( "error", textStatus, error  ); 
+            });
+            
+        }
+        build_comps(json_comps);
+        
+    }
+    
+    
+	var count = 0
+	function update_status_page() {
+		$('#status').empty()
+
+		$('#status').append($('<span>').attr('id', 'clock'));
+		$('#status').children("#clock").text( moment().format('YYYY-MM-DD HH:mm:ss') );
+
+		$('#status').append($('<span> </span>'));
+		
+		$('#status').append($('<span>').attr('id', 'count'));
+		$('#status').children("#count").text( count );
+		count += rate;
+
+	}
+
+
+    
+
+	
+	
+//////////////////////////////////////////
+// misc functions
+	
+	function format_floats( elem, index, array ) {
+		array[index] = parseFloat(elem).toFixed(2);
+	}
+
+	function format_float( str ) {
+		return parseFloat(str).toFixed(2);
+	}
+
+	
+	/*
+	 *  normRand: returns normally distributed random numbers
+	 *  http://memory.psych.mun.ca/tech/snippets/random_normal/
+	 */
+	function normRand(mu, sigma) {
+		var x1, x2, rad;
+
+		do {
+			x1 = 2 * Math.random() - 1;
+			x2 = 2 * Math.random() - 1;
+			rad = x1 * x1 + x2 * x2;
+		} while(rad >= 1 || rad == 0);
+
+		var c = Math.sqrt(-2 * Math.log(rad) / rad);
+		var n = x1 * c;
+		return (n * mu) + sigma;
+	};
+
+
+	$(document).ready(function() {
+		//setInterval("get_JSON()",1000);
+	});
+
+	
+
+	function setRate(value){
+		rate = parseInt(value, 10);
+		$('#rate').text(rate);
+	};
+	
+	
+	
+	
+//////////////////////////////////////////
+// after page loads functions
+	
+    $(function() {
+		var dump = $('#text_dump').text;
+        /** This code runs when everything has been loaded on the page */
+		
+		
+        /* Inline sparklines take their values from the contents of the tag */
+        $('.inlinesparkline').sparkline();
+
+        /* Sparklines can also take their values from the first argument
+        passed to the sparkline() function */
+        var myvalues = [10,8,5,7,4,4,1];
+        $('.dynamicsparkline').sparkline(myvalues);
+
+        /* The second argument gives options such as chart type */
+        $('.dynamicbar').sparkline(myvalues, {type: 'bar', barColor: 'green'} );
+
+        /* Use 'html' instead of an array of values to pass options
+        to a sparkline with data in the tag */
+        $('.inlinebar').sparkline('html', {type: 'bar', barColor: 'red'} );
+
+		
+		$( ".slider" ).slider();
+		
+		//$( ".tabs" ).on( "tabsactivate", function( event, ui ) {
+
+
+		$( "#tabs" ).tabs({ 
+			activate: function( event, ui ) {
+				document.title = ui.newTab[0].textContent;
+				//dump(moment().format('YYYY-MM-DD HH:mm:ss');)
+				$.sparkline_display_visible();
+			}
+		});
+
+		$( "#rate" ).slider({
+			change: function( event, ui ) {
+				console.log(ui.value);
+				rate = ui.value - 50;
+			}
+		});
+
+
+		
+    });
+
+
+
+/////////////////////////////////////////////
+// WORLD
+    function make_world(){
+        build_comps(json);
+        
+    }
+    
+    
+    
+    var Component = {
+        name: '',
+
+
+        on: false,
+
+        prop: false,
+        power: false,
+        life_support: false,
+    }
+    
+
+    function build_comps(json){
+        for(comp_name in json) {
+            var comp = Object.create(Component);
+            extend(comp, json[comp_name]);
+            if(comp.life){ 
+                comp.power_use = function(){
+                    return 1 + 10 * comp.people;
+                };
+            };
+            
+            if(comp.prop){ 
+                comp.prop_level = 0;
+                comp.fuel_use = function(){
+                    return 0.001 + 0.1*this.prop_level; 
+                };
+            };
+            if(comp.power){ 
+                comp.power_level =  0;
+                comp.fuel_use = function(){
+                    return 0.001 + 0.01*this.power_level; 
+                };                
+            };
+            if(comp.power && comp.prop){ 
+                comp.fuel_use = function(){
+                    return 0.001 + 0.01*this.power_level + 0.1*this.prop_level; 
+                };
+            };
+                
+                
+            
+            
+            print(comp)
+        };
+        
+        /*
+        console.log('comp',comp)
+        extend(comp, {
+            power_level: 0,
+            prop_level: 0,
+            power: function() {
+                if(!this.on){return 0;}
+                else {return 100*this.power_level;};
+            },
+            fuel_use: function() {
+                if(!this.on){return 0;}
+                else{return 0.001 + 0.01*this.power_level + 0.1*this.prop_level;};
+            } 
+        });
+        console.log('comp',comp)
+        */
+    
+    
+    }
+    
+    
+    /*
+    var Scout = {
+		slots: {
+			prop: 2,
+			life_support: 2
+		},
+		components: {
+			power: 0,
+			replication: 1,
+			computer: 2,
+			sleep_pod: 2,
+			control_pod: 1,
+			cargo: 4		
+		}	
+	}
+
+
+
+	function Hull(hull_style) {
+		this.slots = hull_style.slots
+		this.components = hull_style.components
+	};
+
+    function Component(style){
+        this.type = 'Comp';
+        this.style = style;
+        this.on = false;
+
+
+
+    }
+
+
+	function Prop(style) {
+		this.type = "prop";
+		this.style = style;
+		if(this.style == "scout"){
+			this.power_prod_max = 100
+			this.idle_power = 0
+		}
+		this.on = false;
+		this.power_level = 0
+		this.prop_level = 0
+		this.power = function() {
+			if(!this.on){return 0;}
+			else {return 100*this.power_level;};
+		}
+		this.fuel_use = function() {
+			if(!this.on){return 0;}
+			else{return 0.001 + 0.01*this.power_level + 0.1*this.prop_level;};
+		}
+	}
+
+	function Life_support(style){
+		this.type = "life";
+		this.style = style;
+		if(style == "scout"){
+			this.power_per_person = -10;
+			this.max_people = 4;
+			this.idle_power_use = -0.001;
+		}
+		this.on = false;
+		this.people = 0;
+		this.power_use = function() {
+			if(!this.on){return 0;}
+			else{return this.idle_power_use + this.power_per_person*this.people;};
+		}
+	}
+
+	var comp_array = {};
+	comp_array.prop_scout = new Prop("scout");
+	comp_array.life_scout = new Life_support("scout");
+
+
+	function Ship(style) {
+		this.style = style;
+		this.hull = new Hull(this.style);
+		this.prop = [];
+		for(var i=0, l = this.hull.slots.prop; i < l; i++) {
+			this.prop.push(new Prop(this.style));
+		};
+		
+		_.times(this.hull.slots.life, this.life.push( new Life_support(this.style)) );
+		
+		this.components = []
+		if(hull_type == "scout") {
+			with(this.hull.slots){
+				for(var i = 0; i++; i < prop) {
+					ship.components.push(comp_array["prop_scout"])
+				}
+				for(var i = 0; i++; i < life) {
+					ship.components.push(comp_array["life_scout"])
+				}
+			}
+
+		}
+
+		this.set_idle = function(){
+			for(comp in this.components){
+				if(comp.type == 'prop'){comp.on = true;}
+				else if(comp.type == 'life'){comp.on = true; comp.people = 1}
+			}
+		}
+	}
+	var hull = new Hull("scout");
+	var default_ship = new Ship("scout");
+
+
+    $(function() {
+
+
+
+    });
+    */
+
+</script>
+<script>
+$(function() {
+    $( "#tabs" ).tabs();
+});
+</script>
+
+</head>
+
+
+
+
+
+<body>
+
+<div id='status'>Status</div>
+
+
+<h1 id="title">ShipNet </h1>
+
+
+<div id="main">
+	<div id="tabs">
+		<ul>
+            <li><a href="#Eng">Eng</a></li>
+            <li><a href="#test">Test</a></li>
+            <li><a href="#Brd">Brd</a></li>
+            <li><a href="#Nav">Nav</a></li>
+            <li><a href="#Car">Car</a></li>
+            <li><a href="#text_dump">TextDump</a></li>
+		</ul>
+		<div id="Eng">
+        </div>
+		<div id="test">
+			<span id='rate'>x</span>
+			<input type="range" class= 'slidder' id='rate'
+				min="-50"
+				max="50"
+				step="1"
+				value="0"
+				width='100%'
+				onchange='setRate(this.value)'>
+			<input type="date">
+        </div>
+		<div id="Brd">
+        </div>
+		<div id="Nav">
+        </div>
+		<div id="Car">
+        </div>
+
+		<div id="text_dump">
+			<p>empty</p>
+		</div>
+	</div>
+</div id="main">
+
+
+</body>
+</html>
