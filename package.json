@@ -1,0 +1,15 @@
+{
+    "name": "ShipNet",
+    "version": "",
+    "author": "Keith Showalter",
+    "description": "Ship tablet simulator",
+
+    "dependencies": {
+        "underscore": "latest",
+        "moment": "latest",
+        "jquery": "latest"
+    },
+    "devDependencies": {
+        "browserify": "latest"
+    }
+}
