@@ -6,14 +6,55 @@ var rate = 1
 
 
 var $ = require('jquery');
+console.log($)
 
+var settings = require('./app/settings');
 var misc = require('./app/misc');
 
 
+settings.data = { files: {} };
+//settings.data.files = {};
+settings.data.fileNames = ['comps.json', 'hulls.json', 'ships.json'];
+settings.data.fileNames.forEach(function(name){
+    settings.data.files[name] = {
+        loaded: false,
+        content: null,
+    }
+})
+settings.data.filesLoaded = false;
 
-var d_files = ['comps.json', 'hulls.json', 'ships.json']
+//var d = k.load_files(d_files, make_world)
 
-var d = k.load_files(d_files, make_world)
+settings.data.fileNames.forEach( function( fileName ){
+    console.log(fileName);
+    var url = 'data/'+fileName;
+    console.log(url);
+    $.getJSON( url)
+        .fail( function(returned){
+            console.log('failed', returned)
+        })
+        .done( function(json){
+            //console.log('done', data);
+            ready(json, fileName);
+        })
+})
+
+
+function ready(json, fileName){
+    settings.data.files[fileName].content = json;
+    settings.data.files[fileName].loaded = true;
+
+    var go = true;
+    for( fileName in settings.data.files ){
+       if( ! settings.data.files[fileName].loaded ) go = false; 
+    }
+    if( go ) start();
+}
+
+
+function start(){
+    console.log('start');
+}
 
 
 
@@ -21,6 +62,19 @@ var d = k.load_files(d_files, make_world)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// OLD content
 
 
 function make_world(d){
@@ -30,6 +84,7 @@ function make_world(d){
 //	var hulls = build_hulls(d.hulls)
 }
 
+/*
 var Component = {
     name: '',
 
@@ -50,6 +105,7 @@ Component.prototype.update - function(){
 	
 	
 }
+*/
 
 
 function build_comps(json){
@@ -103,4 +159,5 @@ function build_comps(json){
 
 
 
+console.log('settings', settings);
 
