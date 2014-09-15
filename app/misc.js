@@ -41,8 +41,8 @@ function setRate(id, value){
 }
 
 
-module.returns.getJSON = getJSON;
-module.returns.formatFloats = formatFloats;
-module.returns.formatFloat = formatFloat;
-module.returns.normRand = normRand;
-module.returns.setRate = setRate;
+module.exports.getJSON = getJSON;
+module.exports.formatFloats = formatFloats;
+module.exports.formatFloat = formatFloat;
+module.exports.normRand = normRand;
+module.exports.setRate = setRate;
