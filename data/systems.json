@@ -1,0 +1,19 @@
+{
+    "nav": {
+
+    },
+    "prop": {
+        "function": "Propulsion"
+
+    },
+    "power": {
+
+    },
+    "life": {
+        "function": "Life Support"
+
+    },
+    "manipulator": {
+
+    }
+}
