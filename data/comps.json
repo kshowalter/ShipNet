@@ -4,9 +4,10 @@
     "scout engine 1":{
         "function": "Propulsion",
 
-        "power": true,
-        "prop": true,
-
+        "systems": [
+            "power", 
+            "prop"
+        ],
 		"max_power_generation": 100,
         "fuel_use_min": 0.001,
         "fuel_use_max": 0.10
@@ -14,10 +15,13 @@
 
 
     },
+
     "life pod 1":{
         "function": "Life Support",
 
-        "life": true,
+        "systems": [
+            "life" 
+        ],
 
         "power_use": -10,
 
@@ -27,9 +31,16 @@
 
 
 
+    },
+
+    "Nano bath": {
+        "systems": [
+            "manipulator"
+        ],
+        "power_use": -1
     }
 
-
+    
     
     
     

@@ -1,11 +1,57 @@
 body {
-    background: #DFDFDF;
+    background: DarkGrey;
+    padding: 0px;
+
+	font-family: 'Open Sans', sans-serif;
 }
 
-.page {
-    background: WhiteSmoke;
-    margin: 10px;
+a {
+    text-decoration: none;
 }
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+img { 
+    border: 0;
+}
+
+
+.ship {
+    width: 200px;
+    background: WhiteSmoke;
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    padding: 0px;
+    margin: 10px;
+
+}
+
+.system {
+    background: White;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: black;
+
+}
+
+
+.drawer {
+    background: WhiteSmoke;
+    display: none;
+    border-top-width: 1px;
+    border-top-style: dotted;
+    border-top-color: grey;
+}
+
+
+
+
+/*
 
 #system_container {
     float: left;
@@ -89,3 +135,5 @@ body {
     float: right;
     padding: 4px;
 }
+
+*/

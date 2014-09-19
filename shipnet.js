@@ -1,7 +1,9 @@
 'use strict';
+var log = console.log.bind(console);
 
 var rate = 1
 
+var misc = require('./app/misc');
 
 
 
@@ -9,26 +11,26 @@ var $ = require('jquery');
 console.log($)
 
 var settings = require('./app/settings');
-var misc = require('./app/misc');
+var ship = settings.ship;
 
-
-settings.data = { files: {} };
-//settings.data.files = {};
-settings.data.fileNames = ['comps.json', 'hulls.json', 'ships.json'];
-settings.data.fileNames.forEach(function(name){
-    settings.data.files[name] = {
+settings.data = {};
+settings.file = {};
+settings.file.files = {};
+settings.file.fileNames = ['comps.json', 'hulls.json', 'ships.json', 'systems.json', 'mater.json'];
+settings.file.fileNames.forEach(function(name){
+    settings.file.files[name] = {
         loaded: false,
         content: null,
     }
 })
-settings.data.filesLoaded = false;
+settings.file.filesLoaded = false;
 
 //var d = k.load_files(d_files, make_world)
 
-settings.data.fileNames.forEach( function( fileName ){
-    console.log(fileName);
+settings.file.fileNames.forEach( function( fileName ){
+    //console.log(fileName);
     var url = 'data/'+fileName;
-    console.log(url);
+    //console.log(url);
     $.getJSON( url)
         .fail( function(returned){
             console.log('failed', returned)
@@ -40,13 +42,18 @@ settings.data.fileNames.forEach( function( fileName ){
 })
 
 
-function ready(json, fileName){
-    settings.data.files[fileName].content = json;
-    settings.data.files[fileName].loaded = true;
+function ready(json, jsonFileName){
+    settings.file.files[jsonFileName].content = json;
+    settings.file.files[jsonFileName].loaded = true;
+
+    var temp = jsonFileName.split(".");
+    temp.pop();
+    var name = temp.join(".");
+    settings.data[name] = json;
 
     var go = true;
-    for( fileName in settings.data.files ){
-       if( ! settings.data.files[fileName].loaded ) go = false; 
+    for( var fileName in settings.file.files ){
+       if( ! settings.file.files[fileName].loaded ) go = false; 
     }
     if( go ) start();
 }
@@ -54,11 +61,54 @@ function ready(json, fileName){
 
 function start(){
     console.log('start');
+
+    settings.ship = {
+        systems: {}
+    };
+    for( var systemName in settings.data.systems ) {
+        settings.ship.systems[systemName] = {};
+
+    }
+    for( var componentName in settings.data.comps ) {
+        var component = settings.data.comps[componentName]; 
+        component.systems.forEach( function(systemName) {
+            settings.ship.systems[systemName][componentName] = component;
+        })
+
+    }
+    mk_page(settings);
 }
 
 
 
+function mk_page(settings){
+    log('making page');
+    var ship = settings.ship;
 
+    var body = $('body');
+
+
+    var shipDiv = $('<div>').attr('class', 'ship').appendTo(body);
+
+    var title = $('<span>').text('ship').appendTo(shipDiv);
+
+    for( var systemName in ship.systems ){
+        var systemDiv = $('<div>').attr('class', 'system').attr('id', 'system_'+systemName).appendTo(shipDiv);
+        var systemTitle = $('<a>').attr('href', '#').text(systemName).appendTo(systemDiv).click(function(){
+            log($('#system_'+systemName).children('.drawer'));
+            $(this).parent().children('.drawer').slideToggle('fast');
+            //$(this).slideToggle();
+        });
+        var drawer = $("<div>").attr('class', 'drawer').appendTo(systemDiv);
+        var system = ship.systems[systemName];
+        for( var compName in system ){
+            var compDiv = $('<div>').attr('class', 'component').appendTo(drawer);
+            compDiv.html(compName)
+        }
+    }
+
+
+}
 
 
 
