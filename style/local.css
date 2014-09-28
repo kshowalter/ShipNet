@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Open Sans";
+    src: url(Open_Sans/OpenSans-Regular.ttf) format("truetype");
+}
+
 body {
     background: DarkGrey;
     padding: 0px;
@@ -19,9 +24,25 @@ img {
     border: 0;
 }
 
+p {
+    padding: 0px;
+    margin: 0px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+span {
+    padding: 0px;
+    margin: 0px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.id {
+    font-style: italic;
+}
 
 .ship {
-    width: 200px;
+    width: 400px;
     background: WhiteSmoke;
     border-width: 2px;
     border-style: solid;
@@ -33,7 +54,7 @@ img {
 
 .system {
     background: White;
-    border-top-width: 1px;
+    border-top-width: 2px;
     border-top-style: solid;
     border-top-color: black;
 
@@ -42,15 +63,26 @@ img {
 
 .drawer {
     background: WhiteSmoke;
+    /* 
     display: none;
+    */
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: grey;
+}
+
+
+.subSection {
+    background: WhiteSmoke;
     border-top-width: 1px;
     border-top-style: dotted;
     border-top-color: grey;
 }
 
 
-
-
+.rightValue {
+    float: right;
+}
 /*
 
 #system_container {
