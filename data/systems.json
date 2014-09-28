@@ -1,9 +1,5 @@
 {
-    "nav": {
-
-    },
-    "prop": {
-        "function": "Propulsion"
+    "net": {
 
     },
     "power": {
@@ -13,7 +9,20 @@
         "function": "Life Support"
 
     },
+    "com":{
+
+    },
+    "nav": {
+
+    },
+    "prop": {
+        "function": "Propulsion"
+
+    },
     "manipulator": {
+
+    },
+    "cargo": {
 
     }
 }

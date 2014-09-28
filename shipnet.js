@@ -8,10 +8,11 @@ var misc = require('./app/misc');
 
 
 var $ = require('jquery');
-console.log($)
 
 var settings = require('./app/settings');
-var ship = settings.ship;
+var ship = require('./app/ship');
+settings.ship = ship;
+var component_update = require('./app/component_update');
 
 settings.data = {};
 settings.file = {};
@@ -46,36 +47,63 @@ function ready(json, jsonFileName){
     settings.file.files[jsonFileName].content = json;
     settings.file.files[jsonFileName].loaded = true;
 
-    var temp = jsonFileName.split(".");
+    var temp = jsonFileName.split('.');
     temp.pop();
-    var name = temp.join(".");
+    var name = temp.join('.');
     settings.data[name] = json;
 
     var go = true;
     for( var fileName in settings.file.files ){
        if( ! settings.file.files[fileName].loaded ) go = false; 
     }
-    if( go ) start();
+    if( go ) start(settings);
 }
 
 
-function start(){
+function start(settings){
     console.log('start');
 
-    settings.ship = {
-        systems: {}
-    };
     for( var systemName in settings.data.systems ) {
         settings.ship.systems[systemName] = {};
 
     }
+
+
+    settings.ship.location = [23,43,144];
+    settings.ship.mainPower = true;
+    settings.ship.life = {
+        on: true,
+        atmos: {
+            O2: 22,
+            CO2: 73,
+        }
+    }
+
+    settings.ship.cargo = [
+        {
+            id: 23123,
+            description: 'crate',
+        },
+        {
+            id: 124958,
+            description: 'crate',
+        },
+    ]
+
+    settings.ship.net = {
+        ids: {
+            0: "ship",
+        },
+    }
+
     for( var componentName in settings.data.comps ) {
         var component = settings.data.comps[componentName]; 
         component.systems.forEach( function(systemName) {
-            settings.ship.systems[systemName][componentName] = component;
+            settings.ship.systems[systemName][componentName] = installComponent(settings, component);
         })
 
     }
+
     mk_page(settings);
 }
 
@@ -94,23 +122,86 @@ function mk_page(settings){
 
     for( var systemName in ship.systems ){
         var systemDiv = $('<div>').attr('class', 'system').attr('id', 'system_'+systemName).appendTo(shipDiv);
-        var systemTitle = $('<a>').attr('href', '#').text(systemName).appendTo(systemDiv).click(function(){
-            log($('#system_'+systemName).children('.drawer'));
-            $(this).parent().children('.drawer').slideToggle('fast');
-            //$(this).slideToggle();
-        });
-        var drawer = $("<div>").attr('class', 'drawer').appendTo(systemDiv);
-        var system = ship.systems[systemName];
-        for( var compName in system ){
-            var compDiv = $('<div>').attr('class', 'component').appendTo(drawer);
-            compDiv.html(compName)
-        }
     }
+    updateSystems(settings);
 
 
 }
 
+function updateSystems(settings){
+    for( var systemName in settings.ship.systems ){
+        updateSystemDiv(settings, systemName);
+    }
+}
 
+function updateSystemDiv(settings, systemName){
+    var systemDiv = $('#system_'+systemName);
+    systemDiv.empty();
+    var systemTitle = $('<a>').attr('href', '#').text(systemName).appendTo(systemDiv).click(function(){
+        log($('#system_'+systemName).children('.drawer'));
+        $(this).parent().children('.drawer').slideToggle('fast');
+        //$(this).slideToggle();
+    });
+    var drawer = $('<div>').attr('class', 'drawer').appendTo(systemDiv);
+    var system = settings.ship.systems[systemName];
+
+    if( systemName in mkSystems) {
+        mkSystems[systemName](settings).appendTo(drawer);
+    }
+
+    var systemDiv = $('<div>').attr('class', 'subSection').appendTo(drawer);
+
+    $('<p>').html('Installed components').appendTo(systemDiv);
+
+    for( var compName in system ){
+        var comp = system[compName];
+        var compDiv = $('<div>').attr('class', 'component').appendTo(systemDiv);
+        var powDisplay = '_';
+        if( comp.powered ) powDisplay = 'o';
+        $('<a>').attr('href', '#').text('['+powDisplay+']').appendTo(compDiv).click(function(){
+            if( event.toElement.innerHTML === '[o]' ) event.toElement.innerHTML = '[_]';
+            else event.toElement.innerHTML = '[o]';
+            ship.powerToggle(settings, comp.id);
+        });
+        $('<span>').text(compName+' ').appendTo(compDiv);
+        $('<span>').text('('+comp.id+')').attr('class', 'id').appendTo(compDiv);
+        $('<span>').attr('class', 'rightValue').attr('id', 'S'+comp.id+'_status' ).text(comp.status).appendTo(compDiv);
+    }
+}
+
+var mkSystems = {
+    nav: function(settings){
+        var div = $('<div>');
+
+        $('<p>').html( 'Location: '+ settings.ship.location ).appendTo(div);
+
+        return div;
+    },
+    cargo: function(settings){
+        var div = $('<div>');
+        $('<p>').html( 'Cargo contents').appendTo(div);
+        settings.ship.cargo.forEach( function( cargo ){
+            $('<span>').text( 'crate' ).appendTo(div);
+            $('<span>').text( '('+cargo.id+')' ).attr('class', 'id').attr('id', 'C'+cargo.id).appendTo(div);
+            $('<br>').appendTo(div);
+        });
+
+        return div;
+        
+    },
+
+}
+
+function IDmaker(){
+    var id = 100;
+
+    return function(){
+        id++;
+        return id;
+    }
+}
+
+var newID = IDmaker();
 
 
 
@@ -126,6 +217,7 @@ function mk_page(settings){
 
 // OLD content
 
+/*
 
 function make_world(d){
     for( var name in d) { k.obj_rename(d, name, name.split('.')[0])}
@@ -134,7 +226,6 @@ function make_world(d){
 //	var hulls = build_hulls(d.hulls)
 }
 
-/*
 var Component = {
     name: '',
 
@@ -155,7 +246,6 @@ Component.prototype.update - function(){
 	
 	
 }
-*/
 
 
 function build_comps(json){
@@ -204,6 +294,7 @@ function build_comps(json){
 }
 
 
+*/
 
 
 
