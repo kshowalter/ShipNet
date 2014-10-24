@@ -2,9 +2,13 @@
     font-family: "Open Sans";
     src: url(Open_Sans/OpenSans-Regular.ttf) format("truetype");
 }
+@font-face {
+    font-family: "Roboto";
+    src: url(Open_Sans/Roboto-Regular.ttf) format("truetype");
+}
 
 body {
-    background: DarkGrey;
+    background: #F2F2F2;
     padding: 0px;
 
 	font-family: 'Open Sans', sans-serif;
@@ -37,33 +41,52 @@ span {
     margin-right: 3px;
 }
 
+
+#status{
+    font-size: 0.7em;
+    background: lightgray;
+    padding: 1px;
+    margin: 0px;
+    /*
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+    */
+}
+
 .id {
     font-style: italic;
 }
 
 .ship {
     width: 400px;
-    background: WhiteSmoke;
-    border-width: 2px;
-    border-style: solid;
-    border-color: black;
+    background: #F2F2F2;
+    /*
+    border-width: 1px;
+    border-style: dotted;
+    border-color: grey;
+    */
     padding: 0px;
-    margin: 10px;
+    margin: 0px;
 
 }
 
 .system {
+    padding: 0px;
+    margin: 10px;
     background: White;
+    /*
     border-top-width: 2px;
     border-top-style: solid;
     border-top-color: black;
+    */
 
 }
 
 
 .drawer {
-    background: WhiteSmoke;
     /* 
+    background: #F2F2F2;
     display: none;
     */
     border-top-width: 1px;
@@ -73,7 +96,6 @@ span {
 
 
 .subSection {
-    background: WhiteSmoke;
     border-top-width: 1px;
     border-top-style: dotted;
     border-top-color: grey;

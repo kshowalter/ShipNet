@@ -1,18 +1,27 @@
 'use strict';
+var version_string = "Dev";
+
 var log = console.log.bind(console);
 
-var rate = 1
+var moment = require('moment');
 
 var misc = require('./app/misc');
-
-
-
 var $ = require('jquery');
+var k = require('./lib/k/k')
 
 var settings = require('./app/settings');
 var ship = require('./app/ship');
 settings.ship = ship;
 var component_update = require('./app/component_update');
+
+var boot_time = moment();
+
+var title = "ShipNet";
+var rate = 1
+var status_id = "status";
+
+k.setup_body(title)
+setInterval(function(){ k.update_status_page(status_id, boot_time, version_string);},1000);
 
 settings.data = {};
 settings.file = {};
@@ -99,8 +108,8 @@ function start(settings){
     for( var componentName in settings.data.comps ) {
         var component = settings.data.comps[componentName]; 
         component.systems.forEach( function(systemName) {
-            settings.ship.systems[systemName][componentName] = installComponent(settings, component);
-        })
+            settings.ship.systems[systemName][componentName] = ship.funct.installComponent(component);
+        });
 
     }
 
@@ -115,6 +124,7 @@ function mk_page(settings){
 
     var body = $('body');
 
+    var status_bar = $('<div>').attr('id', 'status').appendTo(body);
 
     var shipDiv = $('<div>').attr('class', 'ship').appendTo(body);
 
@@ -123,22 +133,34 @@ function mk_page(settings){
     for( var systemName in ship.systems ){
         var systemDiv = $('<div>').attr('class', 'system').attr('id', 'system_'+systemName).appendTo(shipDiv);
     }
-    updateSystems(settings);
+    update(settings);
 
 
 }
 
-function updateSystems(settings){
+
+
+
+
+function update(settings){
     for( var systemName in settings.ship.systems ){
         updateSystemDiv(settings, systemName);
     }
+
+
+
 }
+ship.misc.globalUpdate = update;
+
+
+
+
 
 function updateSystemDiv(settings, systemName){
     var systemDiv = $('#system_'+systemName);
     systemDiv.empty();
     var systemTitle = $('<a>').attr('href', '#').text(systemName).appendTo(systemDiv).click(function(){
-        log($('#system_'+systemName).children('.drawer'));
+        //log($('#system_'+systemName).children('.drawer'));
         $(this).parent().children('.drawer').slideToggle('fast');
         //$(this).slideToggle();
     });
@@ -161,7 +183,7 @@ function updateSystemDiv(settings, systemName){
         $('<a>').attr('href', '#').text('['+powDisplay+']').appendTo(compDiv).click(function(){
             if( event.toElement.innerHTML === '[o]' ) event.toElement.innerHTML = '[_]';
             else event.toElement.innerHTML = '[o]';
-            ship.powerToggle(settings, comp.id);
+            ship.funct.powerToggle(settings, comp.id);
         });
         $('<span>').text(compName+' ').appendTo(compDiv);
         $('<span>').text('('+comp.id+')').attr('class', 'id').appendTo(compDiv);
@@ -192,16 +214,6 @@ var mkSystems = {
 
 }
 
-function IDmaker(){
-    var id = 100;
-
-    return function(){
-        id++;
-        return id;
-    }
-}
-
-var newID = IDmaker();
 
 
 
