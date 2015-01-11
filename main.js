@@ -1,94 +1,88 @@
 'use strict';
-var version_string = "Dev";
-
 var log = console.log.bind(console);
+
+var version_string = 'Dev';
 
 var moment = require('moment');
 
+
 var misc = require('./app/misc');
 var $ = require('jquery');
-var k = require('./lib/k/k')
+var k = require('./lib/k/k');
 
-var settings = require('./app/settings');
+var settings = require('./app/settings')();
+
+settings.element = require('./app/elements');
+var mk_asteroid = require('./app/mk_asteroid');
+var mk_system = require('./app/mk_system');
+
+settings.systems = [];
+var systems = settings.systems;
+systems.push( mk_system(settings) );
+
+systems[0].orbits.forEach(function(orbit){
+    if( orbit.type === 'Asteroid' ){
+        for( var i=0; i<10; i++){
+            var a = mk_asteroid(settings);
+            log(a);
+            //orbit.content.push( mk_asteroid(settings) );
+
+        }
+    }
+
+});
+
+
+/*
 var ship = require('./app/ship');
 settings.ship = ship;
 var component_update = require('./app/component_update');
 
 var boot_time = moment();
 
-var title = "ShipNet";
-var rate = 1
-var status_id = "status";
+var title = 'ShipNet';
+var rate = 1;
+var status_id = 'status';
 
-k.setup_body(title)
+k.setup_body(title);
 setInterval(function(){ k.update_status_page(status_id, boot_time, version_string);},1000);
 
 settings.data = {};
 settings.file = {};
-settings.file.files = {};
 settings.file.fileNames = ['comps.json', 'hulls.json', 'ships.json', 'systems.json', 'mater.json'];
-settings.file.fileNames.forEach(function(name){
-    settings.file.files[name] = {
-        loaded: false,
-        content: null,
-    }
-})
-settings.file.filesLoaded = false;
+settings.file.fileNames.forEach(function(file_name){
+    var name_split_list = file_name.split('.');
+    name_split_list.pop();
+    var name = name_split_list.join('.');
+    log( './data/' + file_name );
+    log(fs);
+    var t = fs.readFileSync( './data/' + file_name );
+    //var t = fs.readFile('./data/'+file_name);
+    settings.data[name] = t;
+    //settings.data[name] = fs.readFileSync( __dirname + './data/' + file_name );
+});
 
-//var d = k.load_files(d_files, make_world)
-
-settings.file.fileNames.forEach( function( fileName ){
-    //console.log(fileName);
-    var url = 'data/'+fileName;
-    //console.log(url);
-    $.getJSON( url)
-        .fail( function(returned){
-            console.log('failed', returned)
-        })
-        .done( function(json){
-            //console.log('done', data);
-            ready(json, fileName);
-        })
-})
-
-
-function ready(json, jsonFileName){
-    settings.file.files[jsonFileName].content = json;
-    settings.file.files[jsonFileName].loaded = true;
-
-    var temp = jsonFileName.split('.');
-    temp.pop();
-    var name = temp.join('.');
-    settings.data[name] = json;
-
-    var go = true;
-    for( var fileName in settings.file.files ){
-       if( ! settings.file.files[fileName].loaded ) go = false; 
-    }
-    if( go ) start(settings);
-}
-
+start(settings);
 
 function start(settings){
     console.log('start');
+    var ship = settings.ship;
 
     for( var systemName in settings.data.systems ) {
-        settings.ship.systems[systemName] = {};
-
+        ship.systems[systemName] = {};
     }
 
-
-    settings.ship.location = [23,43,144];
-    settings.ship.mainPower = true;
-    settings.ship.life = {
+    ship.location = [23,43,144];
+    ship.mainPower = true;
+    ship.life = {
         on: true,
         atmos: {
             O2: 22,
             CO2: 73,
         }
-    }
+    };
 
-    settings.ship.cargo = [
+    ship.cargo = [
         {
             id: 23123,
             description: 'crate',
@@ -97,19 +91,17 @@ function start(settings){
             id: 124958,
             description: 'crate',
         },
-    ]
+    ];
 
-    settings.ship.net = {
+    ship.net = {
         ids: {
-            0: "ship",
+            0: 'ship',
         },
-    }
+    };
 
     for( var componentName in settings.data.comps ) {
-        var component = settings.data.comps[componentName]; 
-        component.systems.forEach( function(systemName) {
-            settings.ship.systems[systemName][componentName] = ship.funct.installComponent(component);
-        });
+        var component = settings.data.comps[componentName];
+        ship.components[componentName] = component;
 
     }
 
@@ -130,11 +122,10 @@ function mk_page(settings){
 
     var title = $('<span>').text('ship').appendTo(shipDiv);
 
-    for( var systemName in ship.systems ){
-        var systemDiv = $('<div>').attr('class', 'system').attr('id', 'system_'+systemName).appendTo(shipDiv);
+    for( var componentName in ship.component ){
+        var systemDiv = $('<div>').attr('class', 'system').attr('id', 'system_'+componentName).appendTo(shipDiv);
     }
     update(settings);
-
 
 }
 
@@ -150,9 +141,8 @@ function update(settings){
 
 
 }
+
 ship.misc.globalUpdate = update;
-
-
 
 
 
@@ -209,15 +199,15 @@ var mkSystems = {
         });
 
         return div;
-        
+
     },
 
-}
+};
 
 
 
 
-
+log(settings);
 
 
 
@@ -254,9 +244,9 @@ Component.prototype.update - function(){
 		this.power_level = this.power_reqested / this.max_power_generation
 		this.power_availible = this.power_level * this.max_power_generation
 	}
-	
-	
-	
+
+
+
 }
 
 
@@ -267,32 +257,32 @@ function build_comps(json){
         var comp = Object.create(Component)
         k.obj_extend(comp, json[comp_name])
 
-        if(comp.life){ 
+        if(comp.life){
             comp.power_use = function(){
                 return 1 + 10 * comp.people
             }
         }
 
-        if(comp.prop){ 
+        if(comp.prop){
             comp.prop_level = 0
             comp.fuel_use = function(){
-                return 0.001 + 0.1*this.prop_level 
+                return 0.001 + 0.1*this.prop_level
             }
         }
-        if(comp.power){ 
+        if(comp.power){
             comp.power_level =  0
             comp.fuel_use = function(){
-                return 0.001 + 0.01*this.power_level 
-            }                
+                return 0.001 + 0.01*this.power_level
+            }
         }
-        if(comp.power && comp.prop){ 
+        if(comp.power && comp.prop){
             comp.fuel_use = function(){
-                return 0.001 + 0.01*this.power_level + 0.1*this.prop_level 
+                return 0.001 + 0.01*this.power_level + 0.1*this.prop_level
             }
         }
 
         comps[comp_name] = comp
-        
+
     }
 
     for( var key in comps) {
@@ -310,7 +300,4 @@ function build_comps(json){
 
 
 
-
-
-console.log('settings', settings);
-
+log('* settings', settings);
