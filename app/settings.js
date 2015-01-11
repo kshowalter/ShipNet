@@ -1,7 +1,12 @@
 'use strict';
 
-var settings = {}
+var mk_settings = function(settings){
+    settings = settings || {};
 
 
 
-module.exports = settings;
+    return settings;
+};
+
+
+module.exports = mk_settings;
