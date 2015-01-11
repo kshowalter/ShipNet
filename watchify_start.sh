@@ -1,1 +1,1 @@
-watchify shipnet -o index.js -d -v
+watchify -t brfs main.js -o index.js -d -v

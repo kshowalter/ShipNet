@@ -7,9 +7,11 @@
     "dependencies": {
         "underscore": "latest",
         "moment": "latest",
-        "jquery": "latest"
+        "jquery": "latest",
+        "brfs": "latest"
     },
     "devDependencies": {
-        "browserify": "latest"
+        "browserify": "5.13.1"
+
     }
 }
