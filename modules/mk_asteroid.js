@@ -1,4 +1,4 @@
-'use strict';
+'use babel';
 var log = console.log.bind(console);
 
 var mk_asteroid = function(settings){
@@ -28,4 +28,4 @@ var mk_asteroid = function(settings){
     return asteroid;
 };
 
-module.exports = mk_asteroid;
+export default mk_asteroid;

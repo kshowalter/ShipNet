@@ -1,4 +1,4 @@
-'use strict';
+'use babel';
 
 var elements = {};
 var e = elements;
@@ -19,4 +19,4 @@ e.platinum = {};
 e.rhodium = {};
 
 
-module.exports = elements;
+export default elements;

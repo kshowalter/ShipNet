@@ -1,3 +1,5 @@
+'use babel';
+
 var f = {};
 
 f.getJSON = function(URL, name) {
@@ -42,5 +44,4 @@ f.setRate = function(id, value){
     $('#'+id).text(rate);
 };
 
-
-module.exports = f;
+export default f;

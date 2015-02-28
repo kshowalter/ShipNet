@@ -1,4 +1,4 @@
-'use strict';
+'use babel';
 var orbit_types = [ 'Planet', 'Planet', 'Belt'];
 
 var mk_system = function(settings){
@@ -20,4 +20,4 @@ var mk_system = function(settings){
     return system;
 };
 
-module.exports = mk_system;
+export default mk_system;

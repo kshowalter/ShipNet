@@ -1,17 +1,16 @@
 {
-    "name": "ShipNet",
-    "version": "",
-    "author": "Keith Showalter",
-    "description": "Ship tablet simulator",
-
-    "dependencies": {
-        "underscore": "latest",
-        "moment": "latest",
-        "jquery": "latest",
-        "brfs": "latest"
-    },
-    "devDependencies": {
-        "browserify": "5.13.1"
-
-    }
+  "name": "ShipNet",
+  "version": "",
+  "author": "Keith Showalter",
+  "description": "Ship tablet simulator",
+  "dependencies": {
+    "underscore": "latest",
+    "moment": "latest",
+    "jquery": "latest",
+    "seedrandom": "latest"
+  },
+  "devDependencies": {
+    "browserify": "5.13.1",
+    "babelify": "~5.0.3"
+  }
 }

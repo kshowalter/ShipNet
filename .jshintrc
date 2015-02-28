@@ -1,4 +1,16 @@
 {
     "node": true,
-    "browser": true
+    "browser": true,
+    "esnext": true,
+
+
+    "funcscope"     : true,     // true: Tolerate defining variables inside control statements
+    "sub"           : true,     // true: Tolerate using `[]` notation when it can still be expressed in dot notation
+
+    "globals": {
+        "$": true,
+        "_": true,
+        "moment": true,
+        "g": true
+    }
 }

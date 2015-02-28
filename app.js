@@ -1,20 +1,25 @@
-'use strict';
+'use babel';
 var log = console.log.bind(console);
 
 var version_string = 'Dev';
 
-var moment = require('moment');
+import mk_settings from './modules/g';
+import f from './modules/functions';
+
+mk_settings();
+
+g.f = f;
+
+log('* g', g);
 
 
-var misc = require('./app/misc');
-var $ = require('jquery');
-var k = require('./lib/k/k');
 
-var settings = require('./app/settings')();
+/*
+var settings = require('./modules/settings')();
 
-settings.element = require('./app/elements');
-var mk_asteroid = require('./app/mk_asteroid');
-var mk_system = require('./app/mk_system');
+settings.element = require('./modules/elements');
+var mk_asteroid = require('./modules/mk_asteroid');
+var mk_system = require('./modules/mk_system');
 
 settings.systems = [];
 var systems = settings.systems;
@@ -31,12 +36,78 @@ systems[0].orbits.forEach(function(orbit){
     }
 
 });
+//*/
 
+var mk_node = require('./modules/mk_node');
+var mk_name = require('./modules/mk_name');
+
+
+
+
+g.ship = mk_node({
+    name: 'ship',
+    cargo_bay_number: 2,
+    engine_bays: 1,
+
+});
+
+g.ship
+    .add_node( 'nav', mk_node({
+        name: 'nav',
+        db: {},
+        scan: function(){
+            this.db.planets = Object.keys(g.system.planets);
+        },
+    }))
+    .add_node( 'prop', mk_node({
+        name: 'prop',
+
+    }))
+    .add_node( 'life', mk_node({
+        name: 'life',
+
+    }))
+    ;
+
+var ship = g.ship;
+
+
+g.system = {};
+g.system.planets = {};
+
+
+for( var i=0; i<10; i++){
+    g.system.planets[mk_name()] = {};
+}
+
+
+
+log(g.ship);
+ship.node.nav.scan();
+
+
+
+var body = $('body');
+
+
+g.update = function(){
+    body.empty();
+    var f1 = $('<span>').appendTo(body);
+
+    $(g.ship.html()).appendTo(f1);
+
+};
+
+
+
+
+
+g.update();
 
 /*
-var ship = require('./app/ship');
+var ship = require('./modules/ship');
 settings.ship = ship;
-var component_update = require('./app/component_update');
+var component_update = require('./modules/component_update');
 
 var boot_time = moment();
 
@@ -297,7 +368,3 @@ function build_comps(json){
 
 
 */
-
-
-
-log('* settings', settings);

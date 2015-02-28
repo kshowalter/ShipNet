@@ -1,4 +1,4 @@
-'use strict';
+'use babel';
 var log = console.log.bind(console);
 
 
@@ -58,7 +58,7 @@ ship.funct.compTurnOn = function(id){
     var component = ship.net.ids[id];
     component.on = true;
     component.status = 'starting up';
-    
+
     setTimeout( function(){ship.funct.compPowerOn(id)}, 2000);
     ship.misc.globalUpdate(settings)
 }
@@ -81,4 +81,4 @@ ship.funct.compTurnOff = function(id){
 }
 
 
-module.exports = ship;
+export default ship;

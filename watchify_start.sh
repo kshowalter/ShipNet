@@ -1,1 +1,1 @@
-watchify -t brfs main.js -o index.js -d -v
+watchify -t babelify app.js -o index.js -d -v
