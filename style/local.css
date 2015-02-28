@@ -84,15 +84,7 @@ span {
 }
 
 
-.drawer {
-    /*
-    background: #F2F2F2;
-    display: none;
-    */
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: grey;
-}
+
 
 
 .subSection {
@@ -104,4 +96,48 @@ span {
 
 .rightValue {
     float: right;
+}
+
+
+
+
+
+
+
+
+.node {
+    margin: 10px;
+
+}
+
+.title_bar {
+    font-weight: bold;
+    background: #bbc3e4;
+    color: #424242;
+    border: 1px solid grey;
+    padding: 2px;
+    padding-left: 6px;
+}
+
+.title_bar_text {
+    font-weight: bold;
+    color: #424242;
+
+}
+
+.drawer {
+    padding: 2px;
+    background: WhiteSmoke;
+    margin-bottom: 0px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: grey;
+    margin-right: 5px;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: grey;
+    margin-left: 5px;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: grey;
 }

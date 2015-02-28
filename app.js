@@ -1,5 +1,6 @@
 'use babel';
-var log = console.log.bind(console);
+require('consolelog');
+//var log = console.log.bind(console);
 
 var version_string = 'Dev';
 
@@ -38,38 +39,39 @@ systems[0].orbits.forEach(function(orbit){
 });
 //*/
 
-var mk_node = require('./modules/mk_node');
-var mk_name = require('./modules/mk_name');
+import Node from './modules/node';
+
+import mk_name from './modules/mk_name';
 
 
 
 
-g.ship = mk_node({
+var ship = new Node({
     name: 'ship',
     cargo_bay_number: 2,
     engine_bays: 1,
 
 });
 
-g.ship
-    .add_node( 'nav', mk_node({
+ship
+    .add_node( 'nav', new Node({
         name: 'nav',
         db: {},
         scan: function(){
             this.db.planets = Object.keys(g.system.planets);
         },
     }))
-    .add_node( 'prop', mk_node({
+    .add_node( 'prop', new Node({
         name: 'prop',
 
     }))
-    .add_node( 'life', mk_node({
+    .add_node( 'life', new Node({
         name: 'life',
 
     }))
     ;
 
-var ship = g.ship;
+g.ship = ship;
 
 
 g.system = {};

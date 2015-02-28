@@ -7,7 +7,8 @@
     "underscore": "latest",
     "moment": "latest",
     "jquery": "latest",
-    "seedrandom": "latest"
+    "seedrandom": "latest",
+    "consolelog": "~2.0.2"
   },
   "devDependencies": {
     "browserify": "5.13.1",
