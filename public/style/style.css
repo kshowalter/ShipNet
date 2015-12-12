@@ -1,0 +1,162 @@
+body {
+  color: black;
+  font-family:Monospace;
+  font-size:13px;
+
+  /*
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  background: #DFDFDF;
+  */
+  font-family: sans-serif;
+
+  background: whitesmoke;
+
+  padding: 10px;
+}
+
+
+
+a {
+  text-decoration: none;
+  color: inherit;
+
+}
+
+
+
+
+table {
+  border: 1px black solid;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+table, tr, td, th, tbody, thead{vertical-align:baseline}
+
+th, td {
+  border: 1px black solid;
+  text-align: left;
+  padding: 2px;
+  white-space: nowrap;
+}
+
+
+
+/*
+http://stackoverflow.com/questions/4918018/eliminate-padding-margin-around-pics-in-td-elements
+Finally, I add this line, which removes that stupid spacing which appears all the time, the one that isn't padding, margin or anything.
+*/
+h1, h2, h3, h4, h5, h6, th, td, caption { font-weight:normal; }
+
+
+
+
+
+/*///////////////////////////////////
+
+field select
+
+///////////////////////////////////*/
+
+
+div.fieldSelect {
+  margin: 10px 0px;
+}
+
+.fieldSelect .drawer_content {
+  /*
+  width: 900px;
+  margin: 0 auto;
+  overflow: auto;
+  clear: both;
+  border: 1px solid #707070;
+  display: block;
+  */
+  height: 100px;
+  padding: 0px;
+
+}
+
+.fieldSelect span {
+  /*
+  float: left;
+  -webkit-transition: box-shadow 0.5s ease;
+  -moz-transition: box-shadow 0.5s ease;
+  -o-transition: box-shadow 0.5s ease;
+  -ms-transition: box-shadow 0.5s ease;
+  transition: box-shadow 0.5s ease;
+  width: 40px;
+  */
+  margin: 5px;
+  border: 1px solid #707070;
+  padding: 2px 5px;
+  float: left;
+}
+
+
+
+.fieldSelect span.unSelectedField{
+  background-color: darkgrey;
+}
+.fieldSelect span.selectedField{
+  color: white;
+  background-color: #01af0b;
+
+}
+
+
+
+
+/***********/
+/* drawers */
+
+.drawer {
+  padding: 2px;
+  background: WhiteSmoke;
+
+  margin-bottom: 0px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: grey;
+  margin-right: 5px;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-right-color: grey;
+  margin-left: 5px;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: grey;
+}
+
+
+.drawer_container {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.drawer_content {
+  display: block;
+}
+
+.title_bar {
+  font-weight: bold;
+  background: #bbc3e4;
+  color: #424242;
+  border: 1px solid grey;
+  padding: 0px;
+  padding-left: 6px;
+}
+
+.title_bar_text {
+  font-weight: bold;
+  color: #424242;
+}
+
+
+
+
+
+
+.dropList {
+	margin: 4px;
+}

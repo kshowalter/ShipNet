@@ -1,10 +1,10 @@
 var path = require('path');
 
 module.exports = {
-  entry: './browser.js',
+  entry: './browser/app.js',
   output: {
-    path: './',
-    filename: 'public/index.js'
+    path: './public/',
+    filename: 'index.js'
     //devtoolLineToLine: true,
   },
   //devtool: 'eval',
