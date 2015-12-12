@@ -4,14 +4,32 @@
   "author": "Keith Showalter",
   "description": "Ship tablet simulator",
   "dependencies": {
-    "underscore": "latest",
-    "moment": "latest",
-    "jquery": "latest",
     "seedrandom": "latest",
-    "consolelog": "~2.0.2"
+    "lodash": "latest",
+    "jquery": "latest",
+    "moment": "latest",
+    "math": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "redux": "latest",
+    "seedrandom": "latest",
+    "react-redux": "latest",
+    "redux-thunk": "latest",
+    "redux-logger": "latest",
+    "socket.io": "latest",
+    "socket.io-client": "latest",
+    "babel-core": "latest",
+    "babel-polyfill": "latest",
+    "lowdb": "latest"
   },
   "devDependencies": {
-    "browserify": "5.13.1",
-    "babelify": "~5.0.3"
+    "webpack": "latest",
+    "webpack-dev-server": "latest",
+    "babel-loader": "latest",
+    "babel-preset-es2015": "latest",
+    "babel-preset-react": "latest",
+    "babel-eslint": "latest",
+    "eslint": "latest",
+    "eslint-plugin-react": "latest"
   }
 }

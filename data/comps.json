@@ -1,11 +1,11 @@
 {
 
-    
+
     "scout engine 1":{
         "function": "Propulsion",
 
         "systems": [
-            "power", 
+            "power",
             "prop"
         ],
 		"max_power_generation": 100,
@@ -20,7 +20,7 @@
         "function": "Life Support",
 
         "systems": [
-            "life" 
+            "life"
         ],
 
         "power_use": -10,
@@ -40,11 +40,11 @@
         "power_use": -1
     }
 
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
 }
