@@ -1,26 +1,53 @@
-'use babel';
-require('consolelog');
-//var log = console.log.bind(console);
+import 'babel-polyfill';
+import io from 'socket.io-client';
+import seedrandom  from 'seedrandom';
 
-var version_string = 'Dev';
+import React from 'react';
+import { connect, Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import * as ReactDOM from 'react-dom';
+import thunkMiddleware from 'redux-thunk';
+import createLogger from 'redux-logger';
 
-import mk_settings from './modules/g';
+window.global = window;
+window._ = require('lodash');
+window.storage = sessionStorage;
+window.g = {};
+
+var socket = io();
+g.socket = socket;
+
+g.rand = seedrandom('bean&owl');
+
+g.path = __dirname;
+
+
+socket.on('connect', function(){
+  console.log('connected to server');
+
+  console.log('browser says: hi');
+  socket.emit('test', 'hi', function(msg){
+    console.log('server says:', msg);
+  });
+});
+
+var log = console.log.bind(console);
+
+
+
+
 import f from './modules/functions';
-
-mk_settings();
-
 g.f = f;
-
-log('* g', g);
+import Node from './modules/Node';
 
 
 
 /*
-var settings = require('./modules/settings')();
+var settings = require('./app/settings')();
 
-settings.element = require('./modules/elements');
-var mk_asteroid = require('./modules/mk_asteroid');
-var mk_system = require('./modules/mk_system');
+settings.element = require('./app/elements');
+var mk_asteroid = require('./app/mk_asteroid');
+var mk_system = require('./app/mk_system');
 
 settings.systems = [];
 var systems = settings.systems;
@@ -39,40 +66,27 @@ systems[0].orbits.forEach(function(orbit){
 });
 //*/
 
-import Node from './modules/node';
-
-import mk_name from './modules/mk_name';
-
+var mk_node = require('./app/mk_node');
+var mk_name = require('./app/mk_name');
 
 
 
-var ship = new Node({
+
+g.ship = mk_node({
     name: 'ship',
     cargo_bay_number: 2,
     engine_bays: 1,
 
 });
 
-ship
-    .add_node( 'nav', new Node({
-        name: 'nav',
-        db: {},
-        scan: function(){
-            this.db.planets = Object.keys(g.system.planets);
-        },
-    }))
-    .add_node( 'prop', new Node({
-        name: 'prop',
+g.ship.nodes.nav = mk_node({
+    name: 'nav',
+    db: {},
+    scan: function(){
+        this.db.planets = Object.keys(g.system.planets);
+    },
 
-    }))
-    .add_node( 'life', new Node({
-        name: 'life',
-
-    }))
-    ;
-
-g.ship = ship;
-
+});
 
 g.system = {};
 g.system.planets = {};
@@ -85,7 +99,6 @@ for( var i=0; i<10; i++){
 
 
 log(g.ship);
-ship.node.nav.scan();
 
 
 
@@ -102,14 +115,12 @@ g.update = function(){
 
 
 
-
-
 g.update();
 
 /*
-var ship = require('./modules/ship');
+var ship = require('./app/ship');
 settings.ship = ship;
-var component_update = require('./modules/component_update');
+var component_update = require('./app/component_update');
 
 var boot_time = moment();
 
