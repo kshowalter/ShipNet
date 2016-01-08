@@ -1,1 +1,1 @@
-DEBUG=datastorage nodemon ./bin/www
+DEBUG=datastorage nodemon server.js
