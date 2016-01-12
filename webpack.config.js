@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
   entry: './browser/app.js',
@@ -10,6 +11,11 @@ module.exports = {
   //devtool: 'eval',
   //devtool: 'eval-source-map',
 
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('dev')
+    })
+  ],
   module: {
     loaders: [
       {

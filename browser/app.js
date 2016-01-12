@@ -4,10 +4,10 @@ import seedrandom  from 'seedrandom';
 
 import React from 'react';
 import { connect, Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import * as ReactDOM from 'react-dom';
-import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
+
+import DevTools from './redux/DevTools';
 
 window.global = window;
 window._ = require('lodash');
@@ -29,33 +29,41 @@ socket.on('connect', function(){
   });
 });
 
-var log = console.log.bind(console);
 
-
-
-
-import ReactApp from './react/main.js';
-import initState from './initState.js';
+import ReactView from './components/view.js';
 import reducer from './redux/reducer.js';
 
-const loggerMiddleware = createLogger();
+import {
+  tick
+} from './redux/actions';
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware, // lets us dispatch() functions
-  loggerMiddleware // neat middleware that logs actions
-)(createStore);
 
-let store = createStoreWithMiddleware(reducer, initState);
+//const createStoreWithMiddleware = applyMiddleware(
+//  thunkMiddleware, // lets us dispatch() functions
+//  loggerMiddleware // neat middleware that logs actions
+//)(createStore);
+
+
+import configureStore from './redux/configureStore';
+import initState from './initState';
+
+let store = configureStore(initState);
+
 
 var select = function(state) {
   return state;
 };
 
-var App = connect(select)(ReactApp);
+var App = connect(select)(ReactView);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <div>
+      <App />
+      <DevTools />
+    </div>
   </Provider>,
   document.getElementById('content')
 );
+
+store.dispatch(tick());
